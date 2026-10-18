@@ -1,0 +1,22 @@
+# Lab policy for the fictional company Nube Austral.
+# Amounts are cents of a fictional unit. They are not a client fee schedule.
+approval_ttl_seconds: 3600
+approver_roles:
+  - finance_approver
+  - admin
+actions:
+  read_record:
+    disposition: auto
+  draft_notice:
+    disposition: auto
+  issue_credit_note:
+    disposition: needs_approval
+    auto_below_cents: 5000
+    forbidden_above_cents: 500000
+    forbid_non_positive: true
+  change_supplier_bank:
+    disposition: needs_approval
+  send_customer_notice:
+    disposition: forbidden
+  procurement_exception:
+    disposition: forbidden
