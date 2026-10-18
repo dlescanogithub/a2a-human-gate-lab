@@ -1,4 +1,4 @@
-.PHONY: setup demo test eval eval-regression lint format check-secretscan
+.PHONY: setup demo test eval eval-regression eval-live lint format check-secretscan
 
 PYTHON := $(shell if [ -x .venv/bin/python ]; then echo .venv/bin/python; else echo python3; fi)
 
@@ -19,6 +19,11 @@ eval:
 # Expected to exit non-zero. That is the gate going red on purpose.
 eval-regression:
 	$(PYTHON) -m a2a_gate.evalkit regression
+
+# Opt-in. Calls xAI only when LIVE_ENABLED=1 and XAI_API_KEY are set.
+# Not part of test, lint, or CI. Refuses before any socket otherwise.
+eval-live:
+	$(PYTHON) -m a2a_gate.evalkit live
 
 lint: check-secretscan
 	$(PYTHON) -m ruff check .

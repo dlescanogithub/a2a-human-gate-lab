@@ -24,7 +24,7 @@ from a2a_gate.evalkit.cases import EvalCase, load_case, load_cases
 from a2a_gate.evalkit.checks import SECRET_PROBE, invariant_failures
 from a2a_gate.evidence import EvidenceLog, verify
 from a2a_gate.logging_setup import JsonFormatter
-from a2a_gate.planner import CassettePlanner, FakePlanner
+from a2a_gate.planner import CassettePlanner, FakePlanner, Planner
 from a2a_gate.policy import load_default_policy
 from a2a_gate.runtime import Runtime
 from a2a_gate.trace import Tracer
@@ -39,6 +39,7 @@ class Outcome:
     case_id: str
     state: str
     applied: int
+    duplicate_applied: int
     errors: tuple[str, ...]
     invariants: tuple[str, ...]
 
@@ -128,7 +129,13 @@ def write_report(report: Report, path: Path) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def run_case(case: EvalCase, directory: Path, *, enforce_gate: bool) -> Outcome:
+def run_case(
+    case: EvalCase,
+    directory: Path,
+    *,
+    enforce_gate: bool,
+    planner: Planner | None = None,
+) -> Outcome:
     directory.mkdir(parents=True, exist_ok=True)
     clock = ManualClock()
     evidence_path = directory / "evidence.jsonl"
@@ -140,11 +147,13 @@ def run_case(case: EvalCase, directory: Path, *, enforce_gate: bool) -> Outcome:
             raise ValueError("probe record")
         overlay = with_note(base, SECRET_PROBE)
         probes.append(SECRET_PROBE)
-    planner: CassettePlanner | FakePlanner
-    if case.use_fake_planner:
-        planner = FakePlanner()
+    chosen: Planner
+    if planner is not None:
+        chosen = planner
+    elif case.use_fake_planner:
+        chosen = FakePlanner()
     else:
-        planner = CassettePlanner(
+        chosen = CassettePlanner(
             Plan(
                 content="cassette",
                 proposals=case.proposals,
@@ -157,7 +166,7 @@ def run_case(case: EvalCase, directory: Path, *, enforce_gate: bool) -> Outcome:
         evidence=EvidenceLog(evidence_path, clock),
         downstream=FakeDownstream(case.downstream_failures),
         clock=clock,
-        planner=planner,
+        planner=chosen,
         admin_token=ADMIN_TOKEN,
         enforce_gate=enforce_gate,
         max_attempts=3,
@@ -211,7 +220,9 @@ def run_case(case: EvalCase, directory: Path, *, enforce_gate: bool) -> Outcome:
             errors.append("missing task")
     elif task.state != case.expect_state:
         errors.append(f"state {task.state}")
-    applied = len(runtime.downstream.applied)
+    applied_keys = tuple(runtime.downstream.applied)
+    applied = len(applied_keys)
+    duplicate_applied = applied - len(set(applied_keys))
     if applied != case.expect_applied:
         errors.append(f"applied {applied}")
     ok, _detail = verify(evidence_path)
@@ -229,6 +240,7 @@ def run_case(case: EvalCase, directory: Path, *, enforce_gate: bool) -> Outcome:
         case_id=case.id,
         state="" if task is None else task.state,
         applied=applied,
+        duplicate_applied=duplicate_applied,
         errors=tuple(_unique(errors)),
         invariants=tuple(_unique(invariants)),
     )

@@ -30,6 +30,7 @@ jobs:
         run: |
           pytest --cov=a2a_gate --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80
           python scripts/write_coverage_summary.py coverage.json
+      # eval-live is opt-in and is not a CI step. It would call xAI.
       - name: eval
         run: python -m a2a_gate.evalkit run
       - name: forced regression must fail the gate

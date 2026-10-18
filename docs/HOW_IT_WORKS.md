@@ -51,4 +51,4 @@ El 2026-10-18, con Python 3.12.3 y el paquete 0.1.0, `python -m a2a_gate.evalkit
 - No manda mails ni paga.
 - El kill switch no deshace lo que ya se aplicó. Frena lo que viene.
 - La cadena de hash detecta si alguien editó el archivo. No impide que alguien con acceso al disco lo edite.
-- Los tokens de los cassettes (24 y 12) son simulados. Con un modelo real no medimos nada: la tabla dice "none yet".
+- Los tokens de los cassettes (24 y 12) son simulados. El 2026-10-18 sí hubo una medición con xAI, solo del planner: la sección "Live measurement (xAI)" del README, con los logs en `docs/live/`. Eso no corre en CI. 37/37 invariantes limpias es una buena señal, no una prueba, y el match de expectativas no es un puntaje del modelo.

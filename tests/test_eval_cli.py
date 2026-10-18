@@ -1,5 +1,4 @@
 import hashlib
-import json
 from pathlib import Path
 
 import pytest
@@ -7,11 +6,9 @@ import pytest
 from a2a_gate import cli
 from a2a_gate.config import Config
 from a2a_gate.demo import run_demo
-from a2a_gate.errors import ConfigError
 from a2a_gate.evalkit.cases import load_cases
 from a2a_gate.evalkit.checks import SECRET_PROBE
 from a2a_gate.evalkit.suite import run_regression, run_suite
-from a2a_gate.live import build_request, live_allowed, send, urllib_opener
 from a2a_gate.secretscan import scan_text
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,17 +58,15 @@ def test_demo_and_cli(
     assert "sk-" not in captured.out
 
 
-def test_config_and_live(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_config_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("A2A_PORT", "9000")
     monkeypatch.setenv("API_TOKEN", "lab-api")
     monkeypatch.setenv("ADMIN_TOKEN", "lab-admin")
     monkeypatch.setenv("LIVE_MODE", "0")
     config = Config.from_env()
     assert config.port == 9000
-    assert not live_allowed(config)
+    assert not config.live_mode
     config.require_server_tokens()
-    with pytest.raises(ConfigError):
-        send(config, "hola")
     blocked = Config(
         host="127.0.0.1",
         port=1,
@@ -80,57 +75,16 @@ def test_config_and_live(monkeypatch: pytest.MonkeyPatch) -> None:
         admin_token="",
         evidence_path=Path("var/x.jsonl"),
         log_level="INFO",
-        llm_provider="openai",
-        llm_api_key="lab-live-key",
-        llm_base_url="http://127.0.0.1:9/v1/chat/completions",
-        llm_model="lab-model",
+        llm_provider="fake",
+        llm_api_key="",
+        llm_base_url="",
+        llm_model="",
         live_mode=False,
         max_attempts=3,
         seed=1,
     )
     with pytest.raises(ValueError):
         blocked.require_server_tokens()
-    live = Config(
-        host="127.0.0.1",
-        port=1,
-        public_base_url="http://127.0.0.1:1",
-        api_token="lab-api",
-        admin_token="lab-admin",
-        evidence_path=Path("var/x.jsonl"),
-        log_level="INFO",
-        llm_provider="openai",
-        llm_api_key="lab-live-key",
-        llm_base_url="http://127.0.0.1:9/v1/chat/completions",
-        llm_model="lab-model",
-        live_mode=True,
-        max_attempts=3,
-        seed=1,
-    )
-    assert live_allowed(live)
-    body = build_request("lab-model", "hola")
-    assert body["model"] == "lab-model"
-
-    def opener(_req: object, _timeout: int) -> bytes:
-        return json.dumps({"choices": [{"message": {"content": "plan local"}}]}).encode()
-
-    assert send(live, "hola", opener=opener) == "plan local"
-    with pytest.raises(ConfigError):
-        send(live, "hola", opener=lambda _req, _timeout: b"not-json")
-
-    class _Response:
-        def read(self) -> bytes:
-            return b"{}"
-
-        def close(self) -> None:
-            return None
-
-    monkeypatch.setattr("a2a_gate.live.urllib_request.urlopen", lambda *_a, **_k: _Response())
-    from urllib.request import Request
-
-    prepared = Request("http://127.0.0.1:9/v1", data=b"{}", method="POST")
-    assert urllib_opener(prepared, 1) == b"{}"
-    with pytest.raises(ConfigError):
-        urllib_opener(object(), 1)
 
 
 def test_secretscan_and_hygiene() -> None:

@@ -5,7 +5,7 @@ This is a local lab with a human gate. It is not a hosted service.
 ## Secrets
 
 - No API keys, tokens, or private keys belong in the repo.
-- `.env.example` lists variables and leaves `API_TOKEN`, `ADMIN_TOKEN`, and `LLM_API_KEY` empty. Live mode is off unless `LIVE_MODE=1`. CI does not set it.
+- `.env.example` lists variables and leaves `API_TOKEN`, `ADMIN_TOKEN`, `LLM_API_KEY`, and `XAI_API_KEY` empty. The live planner is off unless `LIVE_ENABLED=1`. CI does not set it. `LIVE_MODE` does not enable xAI.
 - The process reads configuration from the environment. The fake planner is the default and needs no key.
 - The demo generates in-process tokens, prints that they are NOT REAL, and does not write them to the evidence file.
 - CI runs `python -m a2a_gate.secretscan` and gitleaks 8.30.1. The gitleaks tarball is checked against a pinned SHA-256 before it runs.
