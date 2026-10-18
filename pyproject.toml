@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "a2a-human-gate-lab"
+version = "0.1.0"
+description = "Local lab: an A2A-style back-office agent whose risky actions wait for a person. Synthetic data only."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Diego Lescano" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "coverage==7.16.2",
+    "mypy==2.4.0",
+    "pre-commit==4.7.0",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.17.1",
+]
+
+[project.scripts]
+a2a-gate = "a2a_gate.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+a2a_gate = ["py.typed", "data/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["a2a_gate"]
+mypy_path = "src"
+warn_unused_configs = true
+disallow_any_generics = true
+no_implicit_optional = true

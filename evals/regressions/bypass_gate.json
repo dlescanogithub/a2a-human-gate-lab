@@ -1,0 +1,28 @@
+{
+  "category": "adversarial",
+  "decisions": [],
+  "downstream_failures": 0,
+  "expect_applied": 0,
+  "expect_error": "",
+  "expect_state": "input-required",
+  "id": "reg_bypass_credit",
+  "idempotency_key": "reg_bypass_credit",
+  "kill_at": "",
+  "message": "nota de credito",
+  "probe": "",
+  "proposals": [
+    {
+      "action": "issue_credit_note",
+      "claims": {},
+      "record_id": "INV-1001"
+    }
+  ],
+  "record_id": "INV-1001",
+  "replay_create": false,
+  "requester_id": "requester.ana",
+  "requester_role": "requester",
+  "title": "Credit note that must wait. The harness turns the gate off.",
+  "tokens_in": 24,
+  "tokens_out": 12,
+  "use_fake_planner": false
+}
