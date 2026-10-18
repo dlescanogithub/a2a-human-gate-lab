@@ -6,7 +6,7 @@ A local lab that tests one thing: an A2A-style back-office agent may propose a r
 
 A back-office model can fill in a credit note or a supplier bank change and sound sure of itself. The expensive mistakes are the ones that leave the building: the wrong amount, the wrong account, a second copy of an action that was already rejected. The lab puts the decision in ordinary code. The planner proposes. A policy chooses auto, needs-approval, or forbidden. A different person approves. A hash-chained log records the decision. A kill switch stops later effects.
 
-Measured on 2026-10-18, package 0.1.0, Python 3.12.3: the cassette gate passed **37 of 37** scripted cases. Command: `.venv/bin/python -m a2a_gate.evalkit run` (exit 0, `elapsed_ms` 24 for that one local run). The forced regression, `.venv/bin/python -m a2a_gate.evalkit regression`, exited 1 and printed `invariant: risky effect without approval`. Pytest the same day: 19 passed, coverage 89.42% (`pytest` 9.1.1, `.venv/bin/pytest --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80`). Pytest also printed `CoverageWarning: Module a2a_gate was previously imported, but not measured`; the 89.42% figure is the total pytest-cov printed anyway.
+Measured on 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`: the cassette gate passed **37 of 37** scripted cases. Command: `.venv/bin/python -m a2a_gate.evalkit run` (exit 0, `elapsed_ms` 24 for that one local run). The forced regression, `.venv/bin/python -m a2a_gate.evalkit regression`, exited 1 and printed `invariant: risky effect without approval`. Pytest the same day: 19 passed, coverage 89.42% (`pytest` 9.1.1, `.venv/bin/pytest --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80`). Pytest also printed `CoverageWarning: Module a2a_gate was previously imported, but not measured`; the 89.42% figure is the total pytest-cov printed anyway.
 
 ## Demo
 
@@ -43,7 +43,7 @@ The planner never sets the amount, never chooses the idempotency key, and never 
 
 ## Results
 
-Measured 2026-10-18, package 0.1.0, Python 3.12.3, on this workspace. One run each. Not a benchmark suite.
+Measured 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`, on this workspace. One run each. Not a benchmark suite. The commit that records this hash does not change the package.
 
 | Check | Command | Result |
 |---|---|---|
