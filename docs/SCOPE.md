@@ -6,7 +6,7 @@ No fees. No statement of work. Phases are a way to talk about rollout, not a cal
 
 - One fictional company, one team of synthetic role ids (`requester.ana`, `approver.finance`, `admin.ops`).
 - The ledger in this repo is in memory and dies with the process.
-- The planner is fake unless someone later turns on `LIVE_MODE` outside CI. That has not been measured.
+- CI runs the cassette planner. An optional live planner exists and was measured once on 2026-10-18, planner only. See the README. CI does not turn it on.
 - Amounts are fictional cents.
 
 ## Phases
@@ -31,6 +31,6 @@ This repository does not meet the second or third exit. It meets the first only 
 
 - Real identity providers, tenants, signed cards, streaming, push notifications.
 - Sending customer notices, procurement exceptions, phone approvals, calendar writes.
-- A measured hosted model.
+- A model in the approval seat, and any claim that the 2026-10-18 planner run is a production proof.
 - Reversing an effect that already applied.
 - Any fee, rate card, or staffing estimate stated as a real price.

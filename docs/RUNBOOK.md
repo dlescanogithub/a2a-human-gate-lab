@@ -59,7 +59,19 @@ Symptom: `python -m a2a_gate verify-evidence PATH` prints `hash mismatch` or `pr
 | Thresholds and who may approve | Finance owner |
 | Evidence file, kill switch token, process | Platform owner |
 | Whether a posted note is reversed | Finance owner, outside this process |
-| Turning on a real model | Nobody, until a measurement note exists. Default off |
+| Turning on the live planner | Whoever holds `XAI_API_KEY`, outside CI. Default off. The 2026-10-18 note is the README section "Live measurement (xAI)" |
+
+## Live planner (opt-in)
+
+This calls xAI. Do it on a machine you control, with a key that is not in the repo.
+
+1. Export `LIVE_ENABLED=1` and `XAI_API_KEY`. The command reads the key from the environment. Do not put it in a file, a cassette, a log, or a report.
+2. Leave `MAX_LIVE_SPEND_USD` at `0.10` unless you have a reason to raise it. The client checks the cap before it sends the next request, including before a retry. A response's `usage.cost_in_usd_ticks` is the cost when that field is present. Otherwise it uses the dated fallback rates in `.env.example`, marked [EST].
+3. Run `make eval-live` or `.venv/bin/python -m a2a_gate.evalkit live --out var/live/run`. `var/` is gitignored. The JSONL log records HTTP status, latency, tokens, cached tokens, cost, and the case id. It does not record the prompt or the note.
+4. Only the planner is live. Approvals stay the scripted decisions in `evals/cases.json`. Do not point this command at a real ledger, and do not treat a green invariant line as a proof.
+5. Do not run it from CI. Do not set `LIVE_ENABLED` in the workflow. `pytest` must keep using the fake transport.
+6. If the command prints `live: disabled` or `XAI_API_KEY is empty`, it has not opened a socket. If it prints `aborted: live_spend_cap`, it stopped before the next request. Leave the partial `calls.jsonl` in `var/` and do not commit it.
+7. Optional env: `XAI_BASE_URL`, `XAI_MODEL` (default `grok-4.20-0309-non-reasoning`), `XAI_MAX_ATTEMPTS` (default 3, only 429 and 5xx), `XAI_TIMEOUT_S` (default 60).
 
 ## Handoff
 

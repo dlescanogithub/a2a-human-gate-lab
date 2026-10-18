@@ -8,6 +8,6 @@ Short version. Do not rename Nube Austral to a real company inside this repo.
 4. Point the effect at their ledger behind the same idempotency key. Add a reversing entry they already have. The kill switch still does not undo a post.
 5. Leave the cassette gate in CI. Add their cases as invariants (no effect without the second person, rejection sticks). Do not freeze a tool-call transcript.
 6. Identity, email, and hosting stay out until the gate is already green without them.
-7. Do not turn on `LIVE_MODE` in CI. A measured model run is a separate note with a date, a command, and a public price URL.
+7. Do not turn on `LIVE_ENABLED` in CI. A measured model run is a separate note with a date and a command. The 2026-10-18 planner-only note is the README section "Live measurement (xAI)". It used API cost ticks. This repo still has no public price URL.
 
 This lab is the shape of the control. It is not the client's system.

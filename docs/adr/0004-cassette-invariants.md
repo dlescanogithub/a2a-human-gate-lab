@@ -16,4 +16,4 @@ The cassette shape is adapted from the public repo agent-runtime-evals. See `doc
 
 ## Consequences
 
-A green gate means the invariants held, not that the planner said a particular sentence. Token counts in the case files are simulated. A real model is not in this gate.
+A green gate means the invariants held, not that the planner said a particular sentence. Token counts in the case files are simulated. A real model is not in this gate. The optional live command is outside CI. Its 2026-10-18 write-up is the README section "Live measurement (xAI)", and that write-up is not this gate.

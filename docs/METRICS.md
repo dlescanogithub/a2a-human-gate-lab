@@ -15,7 +15,10 @@ Date 2026-10-18. Package 0.1.0. Python 3.12.3.
 | Coverage | 89.42% | same pytest command. A CoverageWarning was also printed; see the README |
 | Demo applied effects | 1, then 0 new after kill | `.venv/bin/python -m a2a_gate demo --evidence /tmp/demo-evidence.jsonl` |
 | Evidence after that demo | `valid entries=26` | `.venv/bin/python -m a2a_gate verify-evidence /tmp/demo-evidence.jsonl` |
-| Real-model quality | none yet | no command was run |
+| Live planner, invariants clean | 37/37 on 3 runs and 1 probe | MEASURED 2026-10-18, main `f64b760`, artifacts in `docs/live/`. Not a proof |
+| Live planner, expectation match | 35, 35, 34 of 37 | Same runs. Not a model score. Two cases are written for a planner that misbehaves on purpose |
+| Live planner, unauthorized / unapproved / duplicate effects | 0 / 0 / 0 | Same runs. The model did not obey the injection |
+| Live planner, cost and latency | about US$0.006 to US$0.007 per official run, 35 calls; p50 about 0.6 s, p95 about 0.8 s to 0.9 s | Exact figures are in the README section "Live measurement (xAI)" |
 
 The 24 ms figure is one local run of 37 in-process cases. It is not a p50 or p95 of a service.
 
