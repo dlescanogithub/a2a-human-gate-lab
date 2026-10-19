@@ -13,9 +13,11 @@ from urllib.error import HTTPError, URLError
 
 import pytest
 
+from a2a_gate.catalog import INJECTION_NOTE
 from a2a_gate.errors import ConfigError, PermanentError, TransientError
 from a2a_gate.evalkit.__main__ import main
-from a2a_gate.evalkit.cases import EvalCase, load_cases
+from a2a_gate.evalkit.action_view import ActionFact, action_result
+from a2a_gate.evalkit.cases import Decision, EvalCase, load_cases
 from a2a_gate.evalkit.live_run import execute_live
 from a2a_gate.evalkit.suite import run_case
 from a2a_gate.live import (
@@ -613,3 +615,206 @@ def test_retry_after_garbage_is_ignored(tmp_path: Path) -> None:
     client.chat(({"role": "user", "content": "one"},), case_id="hp_read")
     assert len(delays) == 1
     assert 0 < delays[0] <= 8
+
+
+def _marker_case(
+    case_id: str,
+    record_id: str,
+    message: str,
+    decisions: tuple[Decision, ...] = (),
+) -> EvalCase:
+    return EvalCase(
+        id=case_id,
+        category="edge",
+        title="live log",
+        requester_id="requester.ana",
+        requester_role="requester",
+        message=message,
+        record_id=record_id,
+        idempotency_key=case_id,
+        proposals=(),
+        tokens_in=0,
+        tokens_out=0,
+        decisions=decisions,
+        downstream_failures=0,
+        kill_at="",
+        use_fake_planner=False,
+        probe="",
+        replay_create=False,
+        expect_state="completed",
+        expect_applied=0,
+        expect_error="",
+    )
+
+
+def test_action_result_uses_gate_fields_only() -> None:
+    executed = action_result(
+        ActionFact("issue_credit_note", "auto", "not_required", "applied", "ok")
+    )
+    assert executed == {"action": "issue_credit_note", "result": "executed"}
+    waiting = action_result(
+        ActionFact(
+            "change_supplier_bank",
+            "needs_approval",
+            "pending",
+            "not_run",
+            "approval_pending",
+        )
+    )
+    assert waiting["result"] == "input-required"
+    assert "reason_code" not in waiting
+    blocked = action_result(
+        ActionFact("issue_credit_note", "auto", "not_required", "blocked", "kill_switch")
+    )
+    assert blocked["reason_code"] == "kill_switch"
+    expired = action_result(
+        ActionFact("issue_credit_note", "needs_approval", "expired", "not_run", "expired")
+    )
+    assert expired["result"] == "rejected"
+    assert expired["reason_code"] == "expired"
+    dead = action_result(
+        ActionFact("issue_credit_note", "auto", "not_required", "dead_letter", "dead_letter")
+    )
+    assert dead["reason_code"] == "dead_letter"
+    odd = action_result(
+        ActionFact("send_customer_notice", "forbidden", "not_required", "not_run", "free text")
+    )
+    assert odd["reason_code"] == "unlisted"
+    assert odd["action"] == "send_customer_notice"
+    leaked = action_result(
+        ActionFact(INJECTION_NOTE, "forbidden", "not_required", "not_run", "forbidden")
+    )
+    assert leaked["action"] == "redacted_name"
+    assert INJECTION_NOTE not in json.dumps(leaked)
+
+
+def test_live_log_records_names_and_gate_results(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    raw_param = "RAWPARAM997"
+    leak_mail = "leak" + "@" + "example.test"
+
+    def plan_for(message: str) -> str:
+        if message == "MIX":
+            proposals = [
+                {
+                    "action": "read_record",
+                    "record_id": "INV-1001",
+                    "note": INJECTION_NOTE,
+                    "extra": raw_param,
+                },
+                {"action": "issue_credit_note", "record_id": "INV-1001", "email": leak_mail},
+                {"action": "not_a_real_action", "record_id": "INV-1001"},
+                {"action": INJECTION_NOTE, "record_id": "INV-1001", "account": "100020003000"},
+            ]
+        elif message == "BANK":
+            proposals = [
+                {
+                    "action": "change_supplier_bank",
+                    "record_id": "SUP-2001",
+                    "extra": raw_param,
+                }
+            ]
+        else:
+            proposals = [
+                {"action": "issue_credit_note", "record_id": "INV-1002", "extra": raw_param}
+            ]
+        return json.dumps({"proposals": proposals})
+
+    auto_attempts = {"n": 0}
+
+    def transport(url: str, body: bytes, headers: dict[str, str], timeout_s: float) -> HttpResponse:
+        del url, headers, timeout_s
+        payload = json.loads(body.decode("utf-8"))
+        messages = payload["messages"]
+        user = json.loads(messages[1]["content"])
+        message = str(user["request"])
+        content = plan_for(message)
+        if message == "AUTO":
+            auto_attempts["n"] += 1
+            if auto_attempts["n"] == 1:
+                return HttpResponse(500, b"later")
+        return HttpResponse(200, _body(content, ticks=10, prompt=8, completion=4, cached=0))
+
+    bank = _marker_case(
+        "log_bank",
+        "SUP-2001",
+        "BANK",
+        (
+            Decision(
+                op="reject",
+                actor_id="approver.finance",
+                actor_role="finance_approver",
+                action="change_supplier_bank",
+                record_id="SUP-2001",
+                seconds=0,
+                expect_error="",
+            ),
+        ),
+    )
+    report = execute_live(
+        evals_dir=ROOT / "evals",
+        out_dir=tmp_path / "run",
+        settings=_settings(max_attempts=2),
+        transport=transport,
+        label="unit",
+        cases=(
+            _marker_case("log_mix", "INV-1001", "MIX"),
+            bank,
+            _marker_case("log_auto", "INV-1002", "AUTO"),
+        ),
+        sleeper=lambda delay: None,
+    )
+    assert report.aborted == ""
+    text = (tmp_path / "run" / "calls.jsonl").read_text(encoding="utf-8")
+    lines = [json.loads(line) for line in text.splitlines()]
+    assert lines
+    assert all(isinstance(line, dict) for line in lines)
+    assert INJECTION_NOTE not in text
+    assert raw_param not in text
+    assert leak_mail not in text
+    assert _key() not in text
+    assert "100020003000" not in text
+    assert "Bearer" not in text
+    summary_text = (tmp_path / "run" / "summary.json").read_text(encoding="utf-8")
+    assert INJECTION_NOTE not in summary_text
+    failed = [line for line in lines if line["http_status"] == 500]
+    assert failed
+    assert failed[0]["proposed_action_names"] == []
+    assert failed[0]["action_results"] == []
+    by_case = {line["case"]: line for line in lines if line["http_status"] == 200}
+    mix = by_case["log_mix"]
+    assert mix["proposed_action_names"] == [
+        "read_record",
+        "issue_credit_note",
+        "not_a_real_action",
+        "redacted_name",
+    ]
+    mix_results = {item["action"]: item for item in mix["action_results"]}
+    assert mix_results["read_record"]["result"] == "accepted"
+    assert mix_results["issue_credit_note"]["result"] == "input-required"
+    assert "reason_code" not in mix_results["issue_credit_note"]
+    assert mix_results["not_a_real_action"]["result"] == "rejected"
+    assert mix_results["not_a_real_action"]["reason_code"] == "forbidden"
+    assert mix_results["redacted_name"]["result"] == "rejected"
+    bank_line = by_case["log_bank"]
+    assert bank_line["action_results"][0]["result"] == "rejected"
+    assert bank_line["action_results"][0]["reason_code"] == "rejected"
+    auto = by_case["log_auto"]
+    assert auto["action_results"][0]["result"] == "executed"
+    assert "reason_code" not in auto["action_results"][0]
+    summary = json.loads((tmp_path / "run" / "summary.json").read_text(encoding="utf-8"))
+    assert summary["proposals_by_action"] == {
+        "change_supplier_bank": 1,
+        "issue_credit_note": 2,
+        "not_a_real_action": 1,
+        "read_record": 1,
+        "redacted_name": 1,
+    }
+    assert summary["proposals_rejected"] == 3
+    assert summary["proposals_approval_requested"] == 2
+    assert summary["proposals_unknown_or_out_of_policy"] == 2
+    assert "proposals_by_action: change_supplier_bank=1" in report.text
+    assert "proposals_rejected: 3" in report.text
+    monkeypatch.delenv("LIVE_ENABLED", raising=False)
+    assert main(["live"]) == 2

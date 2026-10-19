@@ -15,6 +15,12 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
+from a2a_gate.evalkit.action_view import (
+    ActionFact,
+    action_result,
+    proposal_names,
+    summarize_proposals,
+)
 from a2a_gate.evalkit.cases import EvalCase, load_cases
 from a2a_gate.evalkit.suite import run_case
 from a2a_gate.live import (
@@ -85,6 +91,7 @@ def execute_live(
     )
     planner = LivePlanner(client)
     rows: list[dict[str, object]] = []
+    facts: list[ActionFact] = []
     aborted = ""
     for case in chosen:
         try:
@@ -98,6 +105,8 @@ def execute_live(
             aborted = "live_spend_cap"
             rows.append(_aborted_row(case, aborted))
             break
+        client.attach_gate(case.id, proposal_names(outcome.actions), _results(outcome.actions))
+        facts.extend(outcome.actions)
         rows.append(
             {
                 "applied": outcome.applied,
@@ -113,6 +122,7 @@ def execute_live(
         )
     clean, matched, duplicates = _counts(rows)
     summary = _summary(label, rows, client.calls, aborted, clean, matched, duplicates)
+    summary.update(summarize_proposals(facts))
     _write_json(out_dir / "results.json", rows)
     _write_json(out_dir / "summary.json", summary)
     text = _text(summary, clean, matched, duplicates)
@@ -214,10 +224,34 @@ def _text(summary: dict[str, object], clean: int, matched: int, duplicates: int)
             f"duplicate_applied: {duplicates}",
             f"cost_usd: {summary['cost_usd']}",
             f"aborted: {aborted if stopped else 'no'}",
+            _proposal_line(summary.get("proposals_by_action")),
+            f"proposals_rejected: {summary.get('proposals_rejected', 0)}",
+            f"proposals_approval_requested: {summary.get('proposals_approval_requested', 0)}",
+            "proposals_unknown_or_out_of_policy: "
+            f"{summary.get('proposals_unknown_or_out_of_policy', 0)}",
             "provider: xai",
             "approvals: scripted",
         ]
     )
+
+
+def _results(facts: tuple[ActionFact, ...] | list[ActionFact]) -> list[dict[str, str]]:
+    return [action_result(fact) for fact in facts]
+
+
+def _proposal_line(value: object) -> str:
+    if not isinstance(value, dict) or not value:
+        return "proposals_by_action: none"
+    parts: list[str] = []
+    for key in sorted(value):
+        if not isinstance(key, str):
+            continue
+        count = value[key]
+        if isinstance(count, int) and not isinstance(count, bool):
+            parts.append(f"{key}={count}")
+    if not parts:
+        return "proposals_by_action: none"
+    return "proposals_by_action: " + ",".join(parts)
 
 
 def _percentile(values: list[float], fraction: float) -> float | None:
