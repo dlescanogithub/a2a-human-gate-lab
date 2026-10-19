@@ -20,6 +20,7 @@ from a2a_gate.catalog import get_record, with_note
 from a2a_gate.clock import ManualClock
 from a2a_gate.downstream import FakeDownstream
 from a2a_gate.errors import GateLabError
+from a2a_gate.evalkit.action_view import ActionFact
 from a2a_gate.evalkit.cases import EvalCase, load_case, load_cases
 from a2a_gate.evalkit.checks import SECRET_PROBE, invariant_failures
 from a2a_gate.evidence import EvidenceLog, verify
@@ -42,6 +43,7 @@ class Outcome:
     duplicate_applied: int
     errors: tuple[str, ...]
     invariants: tuple[str, ...]
+    actions: tuple[ActionFact, ...]
 
     @property
     def ok(self) -> bool:
@@ -243,6 +245,24 @@ def run_case(
         duplicate_applied=duplicate_applied,
         errors=tuple(_unique(errors)),
         invariants=tuple(_unique(invariants)),
+        actions=_action_facts(task),
+    )
+
+
+def _action_facts(task: Task | None) -> tuple[ActionFact, ...]:
+    """Copy gate fields for the live logger. Amounts and record ids stay out."""
+
+    if task is None:
+        return ()
+    return tuple(
+        ActionFact(
+            action=action.action,
+            disposition=action.disposition,
+            approval=action.approval,
+            effect_status=action.effect_status,
+            reason_code=action.reason_code,
+        )
+        for action in task.actions
     )
 
 

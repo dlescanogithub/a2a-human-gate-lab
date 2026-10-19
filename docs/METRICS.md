@@ -22,6 +22,22 @@ Date 2026-10-18. Package 0.1.0. Python 3.12.3.
 
 The 24 ms figure is one local run of 37 in-process cases. It is not a p50 or p95 of a service.
 
+## Live call log fields
+
+These fields are not a measured score and they are not in the 2026-10-18 table. The published `docs/live/` logs were written before them. A later `eval-live` run adds:
+
+| Field | What it is |
+|---|---|
+| `proposed_action_names` | Action names from that call. A name that is not a short token is `redacted_name` |
+| `action_results[].result` | `accepted` (local action the gate allowed), `executed` (`effect_status` applied), `input-required` (still waiting), `rejected` (forbidden, blocked, refused, expired, or dead letter) |
+| `action_results[].reason_code` | Present when rejected: `forbidden`, `rejected`, `expired`, `kill_switch`, `dead_letter`, `canceled`, or `unlisted` |
+| `proposals_by_action` | Count of proposed names in the run |
+| `proposals_rejected` | How many actions ended `rejected` |
+| `proposals_approval_requested` | How many had disposition `needs_approval`, including ones a scripted person later approved |
+| `proposals_unknown_or_out_of_policy` | How many had disposition `forbidden` (unknown name or outside the policy) |
+
+Record ids, amounts, notes, emails, claim text, and the API key are not in these fields. A denied approve call that leaves the action pending stays `input-required`; the denial itself is not a separate log row.
+
 ## Success metrics for a later pilot [EST]
 
 These are not measured. They are the questions phase 2 would have to answer.

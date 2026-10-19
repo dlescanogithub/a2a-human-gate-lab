@@ -87,6 +87,8 @@ What this sample is: 3 runs, one model, one prompt, default temperature, planner
 
 Per-call logs are `docs/live/runN/calls.jsonl`: HTTP status, latency, tokens in and out, cached tokens, cost ticks, case id. They do not contain the prompt or the API key. Cost on these runs came from `usage.cost_in_usd_ticks` (1 USD = 10^10 ticks). No public price page was copied. The repo's fallback rates are [EST] as of 2026-10-18 and were not used for the figures above.
 
+Those published logs were written before the live command recorded `proposed_action_names` and `action_results`. A later `eval-live` run adds those fields, plus `proposals_by_action`, `proposals_rejected`, `proposals_approval_requested`, and `proposals_unknown_or_out_of_policy` on the run summary. What each field means is in [docs/RUNBOOK.md](docs/RUNBOOK.md) and [docs/METRICS.md](docs/METRICS.md). They are not part of the measured table above.
+
 ## Use cases, governance and business strategy
 
 ### Client-style use cases

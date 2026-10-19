@@ -3,8 +3,9 @@
 Off unless the caller opts in. CI and pytest pass a fake transport and do not
 open a socket. The API key is read from the environment by ``LiveSettings``
 and is placed only on the Authorization header. Call logs record status,
-latency, tokens, and cost. They do not record the prompt, the record note,
-or the key.
+latency, tokens, cost, proposed action names, and the gate result for each
+action. They do not record the prompt, the record note, parameters, or the
+key.
 
 Cost prefers ``usage.cost_in_usd_ticks`` (1 USD = 10^10 ticks, the unit this
 endpoint returned on 2026-10-18). When that field is absent, cost is a lab
@@ -270,6 +271,7 @@ class ChatClient:
         cost_ticks = ticks if ticks is not None else parsed.cost_ticks
         known_usage = parsed.error == "" or parsed.tokens_in > 0 or parsed.tokens_out > 0
         record: dict[str, object] = {
+            "action_results": [],
             "attempt": attempt,
             "cached_tokens": parsed.cached_tokens if known_usage else None,
             "case": case_id,
@@ -279,19 +281,44 @@ class ChatClient:
             "error": parsed.error,
             "http_status": status,
             "latency_s": round(latency, 4),
+            "proposed_action_names": [],
             "run": self._run,
             "tokens_in": parsed.tokens_in if known_usage else None,
             "tokens_out": parsed.tokens_out if known_usage else None,
         }
-        line = json.dumps(record, sort_keys=True)
-        key = self._settings.api_key
-        if key != "" and key in line:
-            raise PermanentError("live_log_refused")
-        self._log_path.parent.mkdir(parents=True, exist_ok=True)
-        with self._log_path.open("a", encoding="utf-8") as handle:
-            handle.write(line + "\n")
         self.calls.append(record)
+        self._rewrite()
         log(LOGGER, logging.INFO, "xai_call", **record)
+
+    def attach_gate(
+        self,
+        case_id: str,
+        names: Sequence[str],
+        results: Sequence[Mapping[str, str]],
+    ) -> None:
+        """Fill the successful call for ``case_id``. Failed attempts stay empty."""
+
+        for record in reversed(self.calls):
+            if record.get("case") != case_id:
+                continue
+            if record.get("error") != "" or record.get("http_status") != 200:
+                continue
+            record["proposed_action_names"] = [str(name) for name in names]
+            record["action_results"] = [dict(item) for item in results]
+            self._rewrite()
+            log(LOGGER, logging.INFO, "xai_call", **record)
+            return
+
+    def _rewrite(self) -> None:
+        lines: list[str] = []
+        key = self._settings.api_key
+        for record in self.calls:
+            line = json.dumps(record, sort_keys=True)
+            if key != "" and key in line:
+                raise PermanentError("live_log_refused")
+            lines.append(line)
+        self._log_path.parent.mkdir(parents=True, exist_ok=True)
+        self._log_path.write_text("".join(f"{line}\n" for line in lines), encoding="utf-8")
 
 
 def usd_to_ticks(usd: float) -> int:

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-10-19
+
+- Live call logs now add `proposed_action_names` and `action_results` (accepted, rejected, input-required, executed, plus a rejection code when the gate has one). Older log fields stay. Names that are not short tokens are stored as `redacted_name`.
+- A live run summary counts proposals by action, how many were rejected, how many asked for approval, and how many were unknown or outside policy. The 2026-10-18 measured table was recorded before this logging and is unchanged.
+
 ## 0.1.1 - 2026-10-18
 
 - Optional live planner. It calls xAI chat completions only when `LIVE_ENABLED=1` and `XAI_API_KEY` are set (`make eval-live` or `python -m a2a_gate.evalkit live`). CI and pytest do not set those and do not open a socket.
