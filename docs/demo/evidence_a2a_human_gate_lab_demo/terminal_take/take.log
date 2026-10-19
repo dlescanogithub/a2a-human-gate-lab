@@ -1,0 +1,2 @@
+{"cmd1_send": 4.007, "cmd1_done": 4.509, "clr2_send": 28.541, "cmd2_send": 29.148, "cmd2_done": 29.649, "cmd3_send": 37.389, "cmd3_done": 37.89, "cmd3b_send": 40.481, "cmd3b_done": 40.982, "clr4_send": 43.95, "cmd4_send": 44.456, "cmd4_done": 44.957, "clr5_send": 53.399, "cmd5_send": 53.895, "cmd5_done": 54.396, "cmd6_send": 67.563, "cmd6_done": 68.065, "end": 78.187, "S_A_hook": 0.8, "S_B_walk": 10.23, "S_C1_log": 29.54, "S_C2_tamper": 38.08, "S_D_eval": 44.849999999999994, "S_E_live": 54.28999999999999, "S_F_caveat": 67.85999999999999}
+KEY LEAK: False

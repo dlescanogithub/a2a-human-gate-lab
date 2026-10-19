@@ -6,7 +6,7 @@ No fees. No statement of work. Phases are a way to talk about rollout, not a cal
 
 - One fictional company, one team of synthetic role ids (`requester.ana`, `approver.finance`, `admin.ops`).
 - The ledger in this repo is in memory and dies with the process.
-- CI runs the cassette planner. An optional live planner exists and was measured once on 2026-10-18, planner only. See the README. CI does not turn it on.
+- CI runs the cassette planner. An optional live planner exists and was measured on 2026-10-18, planner only: earlier scratch-client runs and two native-client passes. See the README. CI does not turn it on.
 - Amounts are fictional cents.
 
 ## Phases

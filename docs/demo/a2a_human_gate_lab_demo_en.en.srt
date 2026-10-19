@@ -1,0 +1,90 @@
+1
+00:00:00,920 --> 00:00:04,950
+An agent proposes a credit note, or a supplier bank change.
+
+2
+00:00:05,040 --> 00:00:09,930
+Can it just do it? No: a policy decides, and a second person approves.
+
+3
+00:00:10,350 --> 00:00:14,800
+The credit note waits: input-required. Self-approval: denied.
+
+4
+00:00:14,830 --> 00:00:17,250
+A second person approves, and it completes.
+
+5
+00:00:17,280 --> 00:00:20,150
+Replay the same request: no second effect.
+
+6
+00:00:20,180 --> 00:00:23,990
+The bank change? A human rejects it, and it stays rejected.
+
+7
+00:00:24,040 --> 00:00:26,690
+Then the kill switch: the next action fails.
+
+8
+00:00:26,720 --> 00:00:28,240
+Applied effects: one.
+
+9
+00:00:29,680 --> 00:00:32,680
+Every step goes into a hash-chained log.
+
+10
+00:00:32,730 --> 00:00:37,180
+Here: the self-approval denied, then the effect applied once.
+
+11
+00:00:38,240 --> 00:00:40,780
+Now I edit one amount after the fact.
+
+12
+00:00:40,890 --> 00:00:43,650
+Verification fails, at that exact line.
+
+13
+00:00:44,970 --> 00:00:47,590
+Offline, thirty-seven cases pass.
+
+14
+00:00:47,660 --> 00:00:53,090
+Then I force a regression. The gate catches a risky effect without approval,
+and exits with one.
+
+15
+00:00:54,430 --> 00:00:56,790
+Then a real model, planner only.
+
+16
+00:00:56,850 --> 00:01:02,790
+Three runs and a probe: invariants clean, thirty-seven of thirty-seven, every
+time.
+
+17
+00:01:02,820 --> 00:01:07,560
+Expected outcomes matched thirty-five on run one. Strictly, thirty-four.
+
+18
+00:01:07,940 --> 00:01:12,550
+Caveats. Only the planner was measured. Approvals were scripted.
+
+19
+00:01:12,630 --> 00:01:17,580
+One model, one prompt, three runs. A good sign, not a proof.
+
+20
+00:01:18,760 --> 00:01:23,170
+Next would be shadow mode. Everything past the lab is design only.
+
+21
+00:01:23,240 --> 00:01:26,990
+Not covered: real login, tenants, a real ledger.
+
+22
+00:01:27,190 --> 00:01:32,190
+ROI: [EST], about eleven hours a week. An estimate, not a promise.
+
