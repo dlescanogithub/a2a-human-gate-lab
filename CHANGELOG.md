@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Docs: narrated demo under `docs/demo/` (real local run, synthetic xAI TTS, English and Spanish subtitles, number trace).
+- Docs: native-client live artifacts for two passes on main `6a2934b` under `docs/live/native_v2/`. The README keeps the earlier scratch-client table as its own sample.
+
 ## 0.1.2 - 2026-10-19
 
 - Live call logs now add `proposed_action_names` and `action_results` (accepted, rejected, input-required, executed, plus a rejection code when the gate has one). Older log fields stay. Names that are not short tokens are stored as `redacted_name`.

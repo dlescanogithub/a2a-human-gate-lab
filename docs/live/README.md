@@ -1,7 +1,11 @@
 # Live measurement artifacts
 
-These files are the 2026-10-18 measurement against `main` `f64b760`. They are copied here so the README can point at them. The numbers were not regenerated when the live command landed in the repo.
+Two copied samples from 2026-10-18. Nothing here was regenerated for this commit. The call logs do not contain prompts, record notes, or an API key.
 
-`REPORT.md` is the write-up from that day. `run1`, `run2`, and `run3` are the three official runs. `probe` is an earlier run on the same harness. Each directory has `calls.jsonl` (one JSON object per call: HTTP status, latency, tokens, cached tokens, cost ticks), `results.json`, and `summary.json`.
+## Native client, two passes with action logging (main 6a2934b)
 
-The call logs do not contain prompts, record notes, or an API key. The measurement client lived outside this repo. The command in the tree now is a rewrite of that client. See the README section "Live measurement (xAI)".
+`native_v2/REPORT.md`, `native_v2/run1/`, and `native_v2/run2/` are two passes of `python -m a2a_gate.evalkit live`. Each run has `calls.jsonl` (HTTP status, latency, tokens, cached tokens, cost ticks, `proposed_action_names`, `action_results`), `results.json`, `summary.json`, and `cases/`. Figures are in the README subsection of the same name. Planner only. Approvals were scripted.
+
+## Earlier scratch-client runs (main f64b760)
+
+`REPORT.md`, `run1`, `run2`, `run3`, and `probe` are the scratch client that lived outside this repo. The numbers were not regenerated when the live command landed in the tree. See the README subsection "Earlier scratch-client runs".

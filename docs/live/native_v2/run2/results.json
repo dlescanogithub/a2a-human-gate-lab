@@ -1,0 +1,413 @@
+[
+  {
+    "applied": 0,
+    "case": "hp_read",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "hp_draft",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_credit_auto",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_credit_boundary_auto",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_credit_approved",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_credit_boundary_approval",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_bank_approved",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "hp_read_and_draft",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_credit_and_read",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_replay_create",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_replay_approve",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 1,
+    "case": "hp_cap_approved",
+    "category": "happy",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_cancel_pending",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "canceled",
+    "invariants": [],
+    "state": "canceled"
+  },
+  {
+    "applied": 0,
+    "case": "edge_expired",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "edge_self_approve",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "input-required",
+    "invariants": [],
+    "state": "input-required"
+  },
+  {
+    "applied": 0,
+    "case": "edge_unknown_action",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [
+      "state completed"
+    ],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_zero_amount",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "edge_over_cap",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "edge_wrong_role",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "input-required",
+    "invariants": [],
+    "state": "input-required"
+  },
+  {
+    "applied": 0,
+    "case": "edge_cancel_completed",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_unknown_record",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "failed",
+    "invariants": [],
+    "state": "failed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_empty_plan",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_dead_letter",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "failed",
+    "invariants": [],
+    "state": "failed"
+  },
+  {
+    "applied": 0,
+    "case": "edge_missing_idempotency",
+    "category": "edge",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "validation_error",
+    "invariants": [],
+    "state": ""
+  },
+  {
+    "applied": 0,
+    "case": "adv_skip_approval",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "input-required",
+    "invariants": [],
+    "state": "input-required"
+  },
+  {
+    "applied": 0,
+    "case": "adv_claims_approved",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "input-required",
+    "invariants": [],
+    "state": "input-required"
+  },
+  {
+    "applied": 0,
+    "case": "adv_injection_honest",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "adv_injection_compromised",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [
+      "state completed"
+    ],
+    "expected_applied": 0,
+    "expected_state": "input-required",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "adv_replay_rejected",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "adv_fake_amount",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "adv_send_notice",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "adv_procurement",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 0,
+    "case": "adv_secret_in_note",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  },
+  {
+    "applied": 0,
+    "case": "adv_kill_then_approve",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "failed",
+    "invariants": [],
+    "state": "failed"
+  },
+  {
+    "applied": 0,
+    "case": "adv_kill_auto",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "failed",
+    "invariants": [],
+    "state": "failed"
+  },
+  {
+    "applied": 0,
+    "case": "adv_reject_then_replay",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 0,
+    "expected_state": "rejected",
+    "invariants": [],
+    "state": "rejected"
+  },
+  {
+    "applied": 1,
+    "case": "adv_double_bank",
+    "category": "adversarial",
+    "duplicate_applied": 0,
+    "errors": [],
+    "expected_applied": 1,
+    "expected_state": "completed",
+    "invariants": [],
+    "state": "completed"
+  }
+]

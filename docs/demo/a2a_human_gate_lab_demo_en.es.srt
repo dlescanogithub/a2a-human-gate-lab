@@ -1,0 +1,91 @@
+1
+00:00:00,920 --> 00:00:04,950
+Un agente propone una nota de crédito, o un cambio de cuenta bancaria de un proveedor.
+
+2
+00:00:05,040 --> 00:00:09,930
+¿Puede hacerlo solo? No: una política decide y una segunda persona aprueba.
+
+3
+00:00:10,350 --> 00:00:14,800
+La nota de crédito espera: input-required. Autoaprobación: denegada.
+
+4
+00:00:14,830 --> 00:00:17,250
+Una segunda persona aprueba y se completa.
+
+5
+00:00:17,280 --> 00:00:20,150
+Se repite el mismo pedido: no hay un segundo efecto.
+
+6
+00:00:20,180 --> 00:00:23,990
+¿El cambio de banco? Una persona lo rechaza y queda rechazado.
+
+7
+00:00:24,040 --> 00:00:26,690
+Después el interruptor de emergencia: la siguiente acción falla.
+
+8
+00:00:26,720 --> 00:00:28,240
+Efectos aplicados: uno.
+
+9
+00:00:29,680 --> 00:00:32,680
+Cada paso queda en un registro encadenado por hash.
+
+10
+00:00:32,730 --> 00:00:37,180
+Acá: la autoaprobación denegada y después el efecto aplicado una sola vez.
+
+11
+00:00:38,240 --> 00:00:40,780
+Ahora edito un monto después del hecho.
+
+12
+00:00:40,890 --> 00:00:43,650
+La verificación falla, en esa línea exacta.
+
+13
+00:00:44,970 --> 00:00:47,590
+Sin conexión, pasan treinta y siete casos.
+
+14
+00:00:47,660 --> 00:00:53,090
+Después fuerzo una regresión. El gate detecta un efecto riesgoso sin aprobación y sale
+con uno.
+
+15
+00:00:54,430 --> 00:00:56,790
+Después un modelo real, solo el planificador.
+
+16
+00:00:56,850 --> 00:01:02,790
+Tres corridas y una sonda: invariantes limpias, treinta y siete de treinta y siete,
+siempre.
+
+17
+00:01:02,820 --> 00:01:07,560
+Los resultados esperados coincidieron treinta y cinco en la primera corrida.
+Estrictamente, treinta y cuatro.
+
+18
+00:01:07,940 --> 00:01:12,550
+Salvedades. Solo se midió el planificador. Las aprobaciones fueron guionadas.
+
+19
+00:01:12,630 --> 00:01:17,580
+Un modelo, un prompt, tres corridas. Una buena señal, no una prueba.
+
+20
+00:01:18,760 --> 00:01:23,170
+Lo siguiente sería el modo shadow. Todo lo que pasa del laboratorio es solo diseño.
+
+21
+00:01:23,240 --> 00:01:26,990
+No cubierto: login real, tenants, un libro contable real.
+
+22
+00:01:27,190 --> 00:01:32,190
+ROI: [EST], unas once horas por semana. Una estimación, no una promesa.
+

@@ -15,16 +15,19 @@ Date 2026-10-18. Package 0.1.0. Python 3.12.3.
 | Coverage | 89.42% | same pytest command. A CoverageWarning was also printed; see the README |
 | Demo applied effects | 1, then 0 new after kill | `.venv/bin/python -m a2a_gate demo --evidence /tmp/demo-evidence.jsonl` |
 | Evidence after that demo | `valid entries=26` | `.venv/bin/python -m a2a_gate verify-evidence /tmp/demo-evidence.jsonl` |
-| Live planner, invariants clean | 37/37 on 3 runs and 1 probe | MEASURED 2026-10-18, main `f64b760`, artifacts in `docs/live/`. Not a proof |
-| Live planner, expectation match | 35, 35, 34 of 37 | Same runs. Not a model score. Two cases are written for a planner that misbehaves on purpose |
-| Live planner, unauthorized / unapproved / duplicate effects | 0 / 0 / 0 | Same runs. The model did not obey the injection |
-| Live planner, cost and latency | about US$0.006 to US$0.007 per official run, 35 calls; p50 about 0.6 s, p95 about 0.8 s to 0.9 s | Exact figures are in the README section "Live measurement (xAI)" |
+| Live planner, scratch client, invariants clean | 37/37 on 3 runs and 1 probe | MEASURED 2026-10-18, main `f64b760`, artifacts in `docs/live/` (`run1`, `run2`, `run3`, `probe`). Not a proof |
+| Live planner, scratch client, expectation match | 35, 35, 34 of 37 | Same runs. Not a model score. Two cases are written for a planner that misbehaves on purpose |
+| Live planner, scratch client, unauthorized / unapproved / duplicate effects | 0 / 0 / 0 | Same runs. The model did not obey the injection |
+| Live planner, scratch client, cost and latency | about US$0.006 to US$0.007 per official run, 35 calls; p50 about 0.6 s, p95 about 0.8 s to 0.9 s | Exact figures are in the README subsection "Earlier scratch-client runs" |
+| Live planner, native client, invariants clean | 37/37 on both passes | MEASURED 2026-10-18, main `6a2934b`, artifacts in `docs/live/native_v2/`. Not a proof |
+| Live planner, native client, expectation match | 35/37 on both passes | Same passes. Mismatches named in that README subsection: `edge_unknown_action` and `adv_injection_compromised`. Not a model score |
+| Live planner, native client, cost | US$0.01081 and US$0.00671, total US$0.0175 | 35 calls per pass, all HTTP 200. Exact tokens, p50/p95, and the proposal breakdown are in the README subsection "Native client, two passes with action logging (main 6a2934b)" |
 
 The 24 ms figure is one local run of 37 in-process cases. It is not a p50 or p95 of a service.
 
 ## Live call log fields
 
-These fields are not a measured score and they are not in the 2026-10-18 table. The published `docs/live/` logs were written before them. A later `eval-live` run adds:
+These fields are not a measured score. They are not in the earlier scratch-client table (`docs/live/run1`, `run2`, `run3`, `probe`). Those logs were written before the fields existed. The native-client logs in `docs/live/native_v2/` include them. A later `eval-live` run records:
 
 | Field | What it is |
 |---|---|

@@ -1,0 +1,34 @@
+[
+ {
+  "id": "A_hook",
+  "text": "An agent proposes a credit note, or a supplier bank change. Can it just do it? No: a policy decides, and a second person approves."
+ },
+ {
+  "id": "B_walk",
+  "text": "The credit note waits: input-required. Self-approval: denied. A second person approves, and it completes. Replay the same request: no second effect. The bank change? A human rejects it, and it stays rejected. Then the kill switch: the next action fails. Applied effects: one."
+ },
+ {
+  "id": "C1_log",
+  "text": "Every step goes into a hash-chained log. Here: the self-approval denied, then the effect applied once."
+ },
+ {
+  "id": "C2_tamper",
+  "text": "Now I edit one amount after the fact. Verification fails, at that exact line."
+ },
+ {
+  "id": "D_eval",
+  "text": "Offline, thirty-seven cases pass. Then I force a regression. The gate catches a risky effect without approval, and exits with one."
+ },
+ {
+  "id": "E_live",
+  "text": "Then a real model, planner only. Three runs and a probe: invariants clean, thirty-seven of thirty-seven, every time. Expected outcomes matched thirty-five on run one. Strictly, thirty-four."
+ },
+ {
+  "id": "F_caveat",
+  "text": "Caveats. Only the planner was measured. Approvals were scripted. One model, one prompt, three runs. A good sign, not a proof."
+ },
+ {
+  "id": "G_close",
+  "text": "Next would be shadow mode. Everything past the lab is design only. Not covered: real login, tenants, a real ledger. ROI: E-S-T, about eleven hours a week. An estimate, not a promise."
+ }
+]

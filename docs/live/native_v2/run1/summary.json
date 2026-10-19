@@ -1,0 +1,28 @@
+{
+  "aborted": "",
+  "calls": 35,
+  "cases": 37,
+  "cost_usd": 0.01081415,
+  "duplicate_applied": 0,
+  "http": {
+    "200": 35
+  },
+  "invariant_clean": 37,
+  "matched_expectations": 35,
+  "p50": 0.6463,
+  "p95": 0.8054899999999998,
+  "proposals_approval_requested": 16,
+  "proposals_by_action": {
+    "change_supplier_bank": 2,
+    "draft_notice": 5,
+    "issue_credit_note": 22,
+    "procurement_exception": 1,
+    "read_record": 9,
+    "send_customer_notice": 1
+  },
+  "proposals_rejected": 11,
+  "proposals_unknown_or_out_of_policy": 5,
+  "run": "v2run1",
+  "tokens_in": 13591,
+  "tokens_out": 702
+}

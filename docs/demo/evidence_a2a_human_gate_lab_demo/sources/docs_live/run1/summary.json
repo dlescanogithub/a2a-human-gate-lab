@@ -1,0 +1,15 @@
+{
+ "run": "run1",
+ "cases": 37,
+ "calls": 35,
+ "http": {
+  "200": 35
+ },
+ "cost_usd": 0.00727535,
+ "p50": 0.6318,
+ "p95": 0.9130699999999998,
+ "tokens_in": 13591,
+ "tokens_out": 738,
+ "invariant_clean": 37,
+ "matched_expectations": 35
+}
