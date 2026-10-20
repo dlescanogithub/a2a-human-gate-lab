@@ -2,8 +2,11 @@
 
 ## Unreleased
 
+## 0.1.3 - 2026-10-20
+
 - Docs: narrated demo under `docs/demo/` (real local run, synthetic xAI TTS, English and Spanish subtitles, number trace).
 - Docs: native-client live artifacts for two passes on main `6a2934b` under `docs/live/native_v2/`. The README keeps the earlier scratch-client table as its own sample.
+- Docs: add a three-line README TL;DR under the title.
 
 ## 0.1.2 - 2026-10-19
 
