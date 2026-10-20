@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: __version__ now matches the package version.
+
 ## 0.1.3 - 2026-10-20
 
 - Docs: narrated demo under `docs/demo/` (real local run, synthetic xAI TTS, English and Spanish subtitles, number trace).
