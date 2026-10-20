@@ -1,5 +1,11 @@
 # a2a-human-gate-lab
 
+**TL;DR**
+
+- Local lab (not a production system): an A2A-style back-office agent may propose a risky action, which does not hit the ledger unless a second person allows it.
+- It shows a policy choice (auto, needs-approval, or forbidden), approval by a different person, a hash-chained log, and a kill switch that stops later effects.
+- Run `python -m a2a_gate demo`, or start with [docs/demo/](docs/demo/) and [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
+
 A local lab that tests one thing: an A2A-style back-office agent may propose a risky action, and the action does not hit the ledger unless a second person allows it. The model is a fake planner. The company, Nube Austral, is fictional. This is not a production system and it has not been used with a real client.
 
 ## Problem and result
