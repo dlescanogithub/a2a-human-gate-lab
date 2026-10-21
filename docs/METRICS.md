@@ -4,15 +4,15 @@ Two kinds of numbers. Do not mix them.
 
 ## Measured in this lab
 
-Date 2026-10-18. Package 0.1.0. Python 3.12.3.
+Date 2026-10-18, package 0.1.0, Python 3.12.3, except the test and coverage rows. Those were re-measured on 2026-10-21, package 0.1.3, Python 3.12.3, pytest 9.1.1, git `971c04ccc9c650d52f2de7f5cedcdcff36d04533`.
 
 | Metric | Value | Command |
 |---|---|---|
 | Eval cases passed | 37/37 | `.venv/bin/python -m a2a_gate.evalkit run` |
 | Eval elapsed, one run | 24 ms for the whole suite | same command, field `elapsed_ms` |
 | Forced regression | exit 1 | `.venv/bin/python -m a2a_gate.evalkit regression` |
-| Tests | 19 passed | `.venv/bin/pytest --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80` |
-| Coverage | 89.42% | same pytest command. A CoverageWarning was also printed; see the README |
+| Tests | 44 passed | `pytest --cov=a2a_gate --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80` |
+| Coverage | 92.45% | same pytest command, re-measured 2026-10-21. A CoverageWarning was also printed; the 92.45% is the total pytest-cov printed. See the README |
 | Demo applied effects | 1, then 0 new after kill | `.venv/bin/python -m a2a_gate demo --evidence /tmp/demo-evidence.jsonl` |
 | Evidence after that demo | `valid entries=26` | `.venv/bin/python -m a2a_gate verify-evidence /tmp/demo-evidence.jsonl` |
 | Live planner, scratch client, invariants clean | 37/37 on 3 runs and 1 probe | MEASURED 2026-10-18, main `f64b760`, artifacts in `docs/live/` (`run1`, `run2`, `run3`, `probe`). Not a proof |

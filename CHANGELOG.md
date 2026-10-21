@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Docs: add a business-value section and `docs/BUSINESS_VALUE.md`, and refresh the README and `docs/METRICS.md` pytest lines to the 2026-10-21 measurement (44 passed, 92.45% coverage).
 - Fix: __version__ now matches the package version.
 
 ## 0.1.3 - 2026-10-20

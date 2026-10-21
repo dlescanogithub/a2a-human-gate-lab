@@ -12,7 +12,7 @@ A local lab that tests one thing: an A2A-style back-office agent may propose a r
 
 A back-office model can fill in a credit note or a supplier bank change and sound sure of itself. The expensive mistakes are the ones that leave the building: the wrong amount, the wrong account, a second copy of an action that was already rejected. The lab puts the decision in ordinary code. The planner proposes. A policy chooses auto, needs-approval, or forbidden. A different person approves. A hash-chained log records the decision. A kill switch stops later effects.
 
-Measured on 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`: the cassette gate passed **37 of 37** scripted cases. Command: `.venv/bin/python -m a2a_gate.evalkit run` (exit 0, `elapsed_ms` 24 for that one local run). The forced regression, `.venv/bin/python -m a2a_gate.evalkit regression`, exited 1 and printed `invariant: risky effect without approval`. Pytest the same day: 19 passed, coverage 89.42% (`pytest` 9.1.1, `.venv/bin/pytest --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80`). Pytest also printed `CoverageWarning: Module a2a_gate was previously imported, but not measured`; the 89.42% figure is the total pytest-cov printed anyway.
+Measured on 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`: the cassette gate passed **37 of 37** scripted cases. Command: `.venv/bin/python -m a2a_gate.evalkit run` (exit 0, `elapsed_ms` 24 for that one local run). The forced regression, `.venv/bin/python -m a2a_gate.evalkit regression`, exited 1 and printed `invariant: risky effect without approval`. Pytest re-measured on 2026-10-21 against this branch's package tree, package 0.1.3, Python 3.12.3, pytest 9.1.1, git `971c04ccc9c650d52f2de7f5cedcdcff36d04533`: **44 passed**, coverage **92.45%** (`pytest --cov=a2a_gate --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80`, the CI test step). Pytest also printed `CoverageWarning: Module a2a_gate was previously imported, but not measured`; the 92.45% figure is the total pytest-cov printed anyway (`Total coverage: 92.45%`). The previously published line was 19 passed and 89.42% on `c006882`.
 
 ## Demo
 
@@ -51,11 +51,11 @@ The planner never sets the amount, never chooses the idempotency key, and never 
 
 ## Results
 
-Measured 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`, on this workspace. One run each. Not a benchmark suite. The commit that records this hash does not change the package.
+Cassette, regression, secret scan, demo, and local HTTP rows were measured on 2026-10-18, package 0.1.0, Python 3.12.3, git `c006882e4c849d7de39ea6c9e2d7acdcb2721fd6`, on this workspace. One run each. Not a benchmark suite. The commit that records this hash does not change the package. The unit-test row was re-measured on 2026-10-21 against package 0.1.3, git `971c04ccc9c650d52f2de7f5cedcdcff36d04533`.
 
 | Check | Command | Result |
 |---|---|---|
-| Unit and integration tests | `.venv/bin/pytest --cov=a2a_gate --cov-report=term-missing --cov-fail-under=80` | 19 passed, coverage 89.42% |
+| Unit and integration tests | `pytest --cov=a2a_gate --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80` | 44 passed, coverage 92.45% (2026-10-21, Python 3.12.3, pytest 9.1.1, package 0.1.3, git `971c04c`) |
 | Eval gate | `.venv/bin/python -m a2a_gate.evalkit run` | pass, 37/37, exit 0, elapsed_ms 24 |
 | Forced regression | `.venv/bin/python -m a2a_gate.evalkit regression` | exit 1, `risky effect without approval` |
 | Secret scan | `.venv/bin/python -m a2a_gate.secretscan` | `secret scan: no findings` |
@@ -186,6 +186,39 @@ The business problem is a back office that wants a model to prepare credit notes
 
 Deployment Strategist conversation: start with discovery, not with a model name. Who may approve, what the thresholds are, which system owns the amount, and what "undo" means. Then run shadow: the agent proposes, a person still types the real entry, and you compare. Only after the invariants hold do you let the gate release one action type into a ledger. Finance owns the policy and the approvals. The platform owner owns the log, the kill switch, and the rollback. The model owner does not own the effect.
 
+## Business value
+
+> **Synthetic example.** The customer below (a "mid-size insurer") is fictional, and every business figure is a synthetic assumption, tagged **[SYN]**. **[REPO]** marks numbers measured or configured in this repo. **[REPO-EST]** marks this repo's own illustrative [EST] figures. The value plan is *inspired by* the AWS Business Value Realization (BVR) framework. It is not an official AWS template, and I do not hold the AWS BVR Competency, which is awarded to AWS partner companies. Full plan: [docs/BUSINESS_VALUE.md](docs/BUSINESS_VALUE.md).
+
+**What the repo measures [REPO]:**
+- The cassette gate passes 37/37 invariant cases (12 happy / 12 edge / 13 adversarial).
+- The forced regression exits 1 (`risky effect without approval`).
+- The demo applies 1 effect, blocks the next after the kill switch, and leaves `valid entries=26` in the hash chain.
+- Live, planner only (2 passes, one model, scripted approvals): 37/37 invariants clean, 0 unapproved, self-approved, duplicate, or post-kill effects, `cost_usd` 0.01081415 and 0.00670525.
+
+This is a small sample, not a proof.
+
+**How a team would track value:**
+
+| KPI | Category | Baseline | Target |
+|---|---|---|---|
+| Risky effects without approval | Risk | no systematic control [SYN] | 0 [REPO invariant] |
+| Self-approvals / rejected-then-executed / duplicates | Risk | ~2 wrong notes per month [REPO-EST] | 0 [SYN] |
+| Supplier bank changes without approval | Fraud risk | email-based, single person [SYN] | 0 [SYN] |
+| Minutes per credit note | Productivity | 20 [REPO-EST] | 4 [REPO-EST] |
+| Pending → decision (median) | Agility | not measured [SYN] | ≤4 business hours [SYN] |
+| Audit chains valid | Compliance | loose logs [SYN] | 100% monthly [SYN] |
+| Kill-switch drill | Resilience | never [SYN] | quarterly, 0 later effects [SYN] |
+
+The [REPO] invariant is "risky effect without approval". A credit note under 5000 cents is auto and does not wait for a second person. The 2/month baseline is the repo's [EST] for wrong notes caught by a second person, in [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md).
+
+**Year-1 ROI [SYN]:** ROI = (benefit − cost) / cost.
+- **Base:** (80,200 − 28,850) / 28,850 ≈ **178%**, payback ≈ **3.8 months**.
+- **Conservative:** the reviewer still re-checks half the form and no fraud is stopped. ROI ≈ 8%, payback ≈ 10.9 months.
+- **Minimum:** the reviewer re-checks everything. ROI ≈ −75%, no payback in year 1.
+
+The robust value is control, not speed.
+
 ## Decisions
 
 - [0001 Simplified local HTTP, not a conformance claim](docs/adr/0001-simplified-local-http.md)
@@ -256,6 +289,7 @@ export ADMIN_TOKEN="replace-me"
 - [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) — walkthrough in plain Spanish
 - [docs/architecture.md](docs/architecture.md)
 - [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md)
+- [docs/BUSINESS_VALUE.md](docs/BUSINESS_VALUE.md) — value plan for a fictional insurer; synthetic figures are tagged [SYN]
 - [docs/DISCOVERY.md](docs/DISCOVERY.md)
 - [docs/SCOPE.md](docs/SCOPE.md)
 - [docs/RISKS.md](docs/RISKS.md)
