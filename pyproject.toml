@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "a2a-human-gate-lab"
-version = "0.1.3"
+version = "0.1.4"
 description = "Local lab: an A2A-style back-office agent whose risky actions wait for a person. Synthetic data only."
 readme = "README.md"
 requires-python = ">=3.11"
