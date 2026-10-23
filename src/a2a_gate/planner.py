@@ -24,13 +24,13 @@ class FakePlanner:
     def complete(self, request: PlanRequest) -> Plan:
         text = request.message.casefold()
         proposals: list[Proposal] = []
-        if "leer" in text or "read" in text:
+        if "read" in text:
             proposals.append(Proposal("read_record", request.record_id))
-        if "borrador" in text or "draft" in text:
+        if "draft" in text:
             proposals.append(Proposal("draft_notice", request.record_id))
-        if "crédit" in text or "credito" in text or "credit" in text:
+        if "credit" in text:
             proposals.append(Proposal("issue_credit_note", request.record_id))
-        if "banco" in text or "bank" in text or "cbu" in text:
+        if "bank" in text:
             proposals.append(Proposal("change_supplier_bank", request.record_id))
         if not proposals:
             proposals.append(Proposal("read_record", request.record_id))

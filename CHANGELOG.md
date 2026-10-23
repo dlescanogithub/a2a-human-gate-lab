@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- English only: translate the walkthrough, sample messages, catalog notes, the local draft text, and the demo script. The fake planner matches the English words `read`, `draft`, `credit`, and `bank`. Remove the Spanish subtitle file; the English subtitle file stays. The demo video binary is unchanged and still contains its original Spanish soft subtitle track.
+
 ## 0.1.4 - 2026-10-22
 
 - Docs: add a business-value section and `docs/BUSINESS_VALUE.md`, and refresh the README and `docs/METRICS.md` pytest lines to the 2026-10-21 measurement (44 passed, 92.45% coverage).

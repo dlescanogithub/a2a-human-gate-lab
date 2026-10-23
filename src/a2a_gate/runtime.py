@@ -30,7 +30,7 @@ from a2a_gate.types import ActionState, Actor, EffectStatus, PlanRequest, Propos
 EFFECTFUL = frozenset({"issue_credit_note", "change_supplier_bank"})
 LOCAL = frozenset({"read_record", "draft_notice"})
 TERMINAL = frozenset({"completed", "failed", "canceled", "rejected"})
-DRAFT_BODY = "Borrador local. No enviado."
+DRAFT_BODY = "Local draft. Not sent."
 
 LOGGER = logging.getLogger("a2a_gate.runtime")
 

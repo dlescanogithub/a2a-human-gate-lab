@@ -2,7 +2,7 @@
 
 [a2a_human_gate_lab_demo_en.mp4](a2a_human_gate_lab_demo_en.mp4) is a screen recording of a real local run of this repository. The narration voice is synthetic xAI text-to-speech.
 
-Subtitles: [English](a2a_human_gate_lab_demo_en.en.srt) and [Spanish](a2a_human_gate_lab_demo_en.es.srt). The script that was spoken is [guion_final_usado_a2a_human_gate_lab_demo_en.md](guion_final_usado_a2a_human_gate_lab_demo_en.md). That file also holds the Spanish lines used for the Spanish subtitles.
+Subtitles: [English](a2a_human_gate_lab_demo_en.en.srt). The script that was spoken is [final_script.md](final_script.md). The video file still carries the original Spanish soft subtitle track and was not re-encoded.
 
 ## What the video shows
 

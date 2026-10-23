@@ -1,54 +1,54 @@
-# Cómo funciona
+# How it works
 
-Este texto es para contarlo en una entrevista, en voz alta. El laboratorio es local. La empresa Nube Austral es inventada. El "modelo" es un planificador falso. No hay un cliente real atrás.
+This is a walkthrough for engineers and buyers. The lab is local. The company, Nube Austral, is fictional. The "model" is a fake planner. There is no real client behind it.
 
-## La analogía
+## The analogy
 
-Mirá el sistema como una **firma de cheque con dos firmas**. Fijate que la primera firma no paga sola.
+Treat the system as a **check that needs two signatures**. The first signature does not pay by itself.
 
-La primera persona (el agente) puede llenar el cheque: a quién, por qué concepto, con qué importe. Eso es barato y reversible. El banco (el sistema alrededor del modelo) no entrega la plata si falta la segunda firma. La misma persona no puede firmar dos veces. Si el cheque se anuló, sigue anulado aunque alguien lo vuelva a presentar. Y si el gerente de la sucursal baja la persiana (el kill switch), la caja no paga más, aunque el cheque ya tuviera las dos firmas listas y todavía no hubiera salido.
+The first person (the agent) can fill in the check: who it is for, what it is for, and the amount. That is cheap and reversible. The bank (the system around the model) does not hand over the money if the second signature is missing. The same person cannot sign twice. If the check was voided, it stays voided even when someone presents it again. And if the branch manager pulls down the shutter (the kill switch), the till stops paying, even when the check already has both signatures and has not gone out yet.
 
-El modelo razona. El sistema alrededor decide si eso toca el mundo.
+The model reasons. The system around it decides whether that touches the world.
 
-## El recorrido, paso a paso
+## The path, step by step
 
-1. Un cliente local crea una tarea. Manda un mensaje ("nota de credito") y el id de un registro sintético (`INV-1001`).
-2. La tarea pasa por `submitted` y `working`.
-3. El planificador propone acciones. El falso mira palabras del mensaje (`leer`, `borrador`, `credito`, `banco`). No lee la nota del cliente como si fuera una orden.
-4. La política clasifica cada acción: auto, necesita aprobación, o prohibida. El importe de una nota de crédito sale del registro, no del texto del modelo.
-5. Leer y redactar un borrador corren solos. No tocan el libro downstream.
-6. Una nota de crédito chica (menos de 5000 centavos de una unidad inventada) corre sola. De 5000 a 500000 espera a otra persona. Por encima de 500000, o en cero, se rechaza. Cambiar el banco de un proveedor siempre espera.
-7. La tarea queda en `input-required` con motivo `approval-pending`.
-8. Si aprueba la misma persona que pidió, el sistema responde 403 y no aplica nada.
-9. Si aprueba alguien con rol `finance_approver` o `admin`, y no venció el plazo, el efecto entra al libro falso una sola vez.
-10. Si rechaza, la tarea queda `rejected`. Un replay devuelve esa misma tarea. No hay segundo efecto.
-11. Cada línea del log incluye el hash de la anterior. `verify-evidence` recomputa la cadena.
-12. Un admin con el token que salió del entorno puede bajar la persiana. Después de eso, un efecto nuevo no se aplica.
+1. A local client creates a task. It sends a message ("credit note") and the id of a synthetic record (`INV-1001`).
+2. The task moves through `submitted` and `working`.
+3. The planner proposes actions. The fake planner looks at words in the message (`read`, `draft`, `credit`, `bank`). It does not read the customer note as an order.
+4. The policy classifies each action: auto, needs approval, or forbidden. The amount of a credit note comes from the record, not from the model's text.
+5. Reading and drafting a notice run on their own. They do not touch the downstream ledger.
+6. A small credit note (under 5000 cents of a fictional unit) runs on its own. From 5000 to 500000 it waits for another person. Above 500000, or at zero, it is rejected. Changing a supplier's bank always waits.
+7. The task stays in `input-required` with reason `approval-pending`.
+8. If the same person who requested it approves, the system responds 403 and applies nothing.
+9. If someone with role `finance_approver` or `admin` approves, and the deadline has not passed, the effect enters the fake ledger once.
+10. If they reject it, the task stays `rejected`. A replay returns that same task. There is no second effect.
+11. Each line of the log includes the hash of the previous line. `verify-evidence` recomputes the chain.
+12. An admin with the token from the environment can pull the shutter. After that, a new effect is not applied.
 
-## Qué está medido
+## What is measured
 
-El 2026-10-18, con Python 3.12.3 y el paquete 0.1.0, `python -m a2a_gate.evalkit run` pasó 37 de 37 casos. El comando de regresión forzada salió con código 1. Eso está en el README con el comando exacto. No es un número de producción.
+On 2026-10-18, with Python 3.12.3 and package 0.1.0, `python -m a2a_gate.evalkit run` passed 37 of 37 cases. The forced regression command exited with code 1. That is in the README, with the exact command. It is not a production number.
 
-## Glosario
+## Glossary
 
-| Palabra | Qué quiere decir acá |
+| Word | What it means here |
 |---|---|
-| Tarea | Una unidad de trabajo con id y estado. Inspirada en A2A, no es el schema oficial completo |
-| Planificador | El componente que propone acciones. Por defecto es falso |
-| Cassette | Un plan congelado. La eval lo reproduce para no llamar a un modelo pago |
-| Política | El archivo YAML que dice auto, aprobación o prohibido |
-| Efecto | Una escritura en el libro falso: nota de crédito o cambio de banco |
-| Idempotencia | La misma clave devuelve el mismo resultado y no escribe dos veces |
-| Evidencia | Un JSONL que solo agrega líneas y las encadena por hash |
-| Kill switch | Una orden de admin que frena efectos nuevos |
-| Invariante | Una condición que tiene que ser verdad al final, sin importar el camino del modelo |
+| Task | A unit of work with an id and a state. Inspired by A2A, not the full official schema |
+| Planner | The component that proposes actions. By default it is fake |
+| Cassette | A frozen plan. The eval replays it so it does not call a paid model |
+| Policy | The YAML file that says auto, approval, or forbidden |
+| Effect | A write on the fake ledger: a credit note or a bank change |
+| Idempotency | The same key returns the same result and does not write twice |
+| Evidence | A JSONL file that only appends lines and chains them by hash |
+| Kill switch | An admin order that stops new effects |
+| Invariant | A condition that has to be true at the end, whatever path the model took |
 
-## Límites, en serio
+## Limits, plainly
 
-- No habla el protocolo A2A completo. El 2026-10-18 miramos la spec pública (enlace en `docs/architecture.md`). Este lab usa unos nombres de estado y una tarjeta en `/.well-known/agent-card.json`. El binding se llama `LAB-HTTP` a propósito, para no decir que cumplimos JSON-RPC ni el HTTP+JSON oficial.
-- No firma la tarjeta. No hay streaming ni push.
-- No hay login de verdad. El bearer del lab no es un IdP.
-- No manda mails ni paga.
-- El kill switch no deshace lo que ya se aplicó. Frena lo que viene.
-- La cadena de hash detecta si alguien editó el archivo. No impide que alguien con acceso al disco lo edite.
-- Los tokens de los cassettes (24 y 12) son simulados. El 2026-10-18 sí hubo una medición con xAI, solo del planner: la sección "Live measurement (xAI)" del README, con los logs en `docs/live/`. Eso no corre en CI. 37/37 invariantes limpias es una buena señal, no una prueba, y el match de expectativas no es un puntaje del modelo.
+- It does not speak the full A2A protocol. On 2026-10-18 the public spec was checked (link in `docs/architecture.md`). This lab uses a few state names and a card at `/.well-known/agent-card.json`. The binding is named `LAB-HTTP` on purpose, so it does not claim JSON-RPC or the official HTTP+JSON binding.
+- It does not sign the card. There is no streaming and no push.
+- There is no real login. The lab bearer is not an IdP.
+- It does not send email and it does not pay.
+- The kill switch does not undo what was already applied. It stops what comes next.
+- The hash chain detects that someone edited the file. It does not stop someone with disk access from editing it.
+- The cassette tokens (24 and 12) are simulated. On 2026-10-18 there was an xAI measurement of the planner only: the "Live measurement (xAI)" section of the README, with the logs in `docs/live/`. That does not run in CI. 37/37 clean invariants is a good sign, not a proof, and the expectation match is not a score of the model.

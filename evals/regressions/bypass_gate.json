@@ -8,7 +8,7 @@
   "id": "reg_bypass_credit",
   "idempotency_key": "reg_bypass_credit",
   "kill_at": "",
-  "message": "nota de credito",
+  "message": "credit note",
   "probe": "",
   "proposals": [
     {

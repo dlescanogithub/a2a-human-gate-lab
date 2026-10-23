@@ -235,7 +235,7 @@ def test_key_prompt_and_note_stay_out_of_logs(tmp_path: Path) -> None:
     logger.setLevel(logging.INFO)
     try:
         planner = LivePlanner(_client(transport, log_path))
-        plan = planner.complete(PlanRequest("leer factura", "INV-1001", "hp_read"))
+        plan = planner.complete(PlanRequest("read invoice", "INV-1001", "hp_read"))
     finally:
         logger.removeHandler(handler)
     assert plan.proposals[0].action == "read_record"
@@ -244,10 +244,10 @@ def test_key_prompt_and_note_stay_out_of_logs(tmp_path: Path) -> None:
     logged = raw + stream.getvalue()
     assert _key() not in logged
     assert "Bearer" not in logged
-    assert "pago duplicado" not in logged
+    assert "duplicate payment" not in logged
     assert "fictional company" not in logged
-    assert "leer factura" not in logged
-    assert b"pago duplicado" in transport.bodies[0]
+    assert "read invoice" not in logged
+    assert b"duplicate payment" in transport.bodies[0]
     assert _key().encode() not in transport.bodies[0]
     assert transport.headers[0]["Authorization"] == "Bearer " + _key()
 
@@ -311,7 +311,7 @@ def test_unparseable_plan(tmp_path: Path) -> None:
     transport = FakeTransport([HttpResponse(200, _body("hello there", ticks=3))])
     planner = LivePlanner(_client(transport, tmp_path / "calls.jsonl"))
     with pytest.raises(PermanentError) as caught:
-        planner.complete(PlanRequest("leer", "INV-1001", "hp_read"))
+        planner.complete(PlanRequest("read", "INV-1001", "hp_read"))
     assert caught.value.reason_code == "live_unparseable_plan"
 
 
@@ -474,7 +474,7 @@ def test_planner_marks_a_missing_record(tmp_path: Path) -> None:
     content = json.dumps({"proposals": []})
     transport = FakeTransport([HttpResponse(200, _body(content, ticks=1))])
     planner = LivePlanner(_client(transport, tmp_path / "calls.jsonl"))
-    plan = planner.complete(PlanRequest("leer", "NO-SUCH", "edge_unknown_record"))
+    plan = planner.complete(PlanRequest("read", "NO-SUCH", "edge_unknown_record"))
     assert plan.proposals == ()
     assert b"missing" in transport.bodies[0]
     assert b"NO-SUCH" in transport.bodies[0]
@@ -514,7 +514,9 @@ def test_execute_live_uses_the_gate_and_stops_on_the_cap(tmp_path: Path) -> None
     assert summary["duplicate_applied"] == 0
     assert summary["cost_usd"] == 0.0001
     assert _key() not in (tmp_path / "run" / "calls.jsonl").read_text(encoding="utf-8")
-    assert "pago duplicado" not in (tmp_path / "run" / "results.json").read_text(encoding="utf-8")
+    assert "duplicate payment" not in (tmp_path / "run" / "results.json").read_text(
+        encoding="utf-8"
+    )
 
 
 def test_injected_planner_replaces_the_cassette(tmp_path: Path) -> None:

@@ -9,7 +9,7 @@
     "id": "hp_read",
     "idempotency_key": "hp_read",
     "kill_at": "",
-    "message": "leer factura",
+    "message": "read invoice",
     "probe": "",
     "proposals": [
       {
@@ -37,7 +37,7 @@
     "id": "hp_draft",
     "idempotency_key": "hp_draft",
     "kill_at": "",
-    "message": "borrador",
+    "message": "draft",
     "probe": "",
     "proposals": [
       {
@@ -65,7 +65,7 @@
     "id": "hp_credit_auto",
     "idempotency_key": "hp_credit_auto",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -93,7 +93,7 @@
     "id": "hp_credit_boundary_auto",
     "idempotency_key": "hp_credit_boundary_auto",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -130,7 +130,7 @@
     "id": "hp_credit_approved",
     "idempotency_key": "hp_credit_approved",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -167,7 +167,7 @@
     "id": "hp_credit_boundary_approval",
     "idempotency_key": "hp_credit_boundary_approval",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -204,7 +204,7 @@
     "id": "hp_bank_approved",
     "idempotency_key": "hp_bank_approved",
     "kill_at": "",
-    "message": "cambiar banco",
+    "message": "change bank",
     "probe": "",
     "proposals": [
       {
@@ -232,7 +232,7 @@
     "id": "hp_read_and_draft",
     "idempotency_key": "hp_read_and_draft",
     "kill_at": "",
-    "message": "leer y borrador",
+    "message": "read and draft",
     "probe": "",
     "proposals": [
       {
@@ -274,7 +274,7 @@
     "id": "hp_credit_and_read",
     "idempotency_key": "hp_credit_and_read",
     "kill_at": "",
-    "message": "leer y nota de credito",
+    "message": "read and credit note",
     "probe": "",
     "proposals": [
       {
@@ -307,7 +307,7 @@
     "id": "hp_replay_create",
     "idempotency_key": "hp_replay_create",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -352,7 +352,7 @@
     "id": "hp_replay_approve",
     "idempotency_key": "hp_replay_approve",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -389,7 +389,7 @@
     "id": "hp_cap_approved",
     "idempotency_key": "hp_cap_approved",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -426,7 +426,7 @@
     "id": "edge_cancel_pending",
     "idempotency_key": "edge_cancel_pending",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -467,7 +467,7 @@
     "id": "edge_expired",
     "idempotency_key": "edge_expired",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -504,7 +504,7 @@
     "id": "edge_self_approve",
     "idempotency_key": "edge_self_approve",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -532,7 +532,7 @@
     "id": "edge_unknown_action",
     "idempotency_key": "edge_unknown_action",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "",
     "proposals": [
       {
@@ -560,7 +560,7 @@
     "id": "edge_zero_amount",
     "idempotency_key": "edge_zero_amount",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -588,7 +588,7 @@
     "id": "edge_over_cap",
     "idempotency_key": "edge_over_cap",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -625,7 +625,7 @@
     "id": "edge_wrong_role",
     "idempotency_key": "edge_wrong_role",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -662,7 +662,7 @@
     "id": "edge_cancel_completed",
     "idempotency_key": "edge_cancel_completed",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "",
     "proposals": [
       {
@@ -690,7 +690,7 @@
     "id": "edge_unknown_record",
     "idempotency_key": "edge_unknown_record",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "",
     "proposals": [
       {
@@ -718,7 +718,7 @@
     "id": "edge_empty_plan",
     "idempotency_key": "edge_empty_plan",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "",
     "proposals": [],
     "record_id": "INV-1001",
@@ -740,7 +740,7 @@
     "id": "edge_dead_letter",
     "idempotency_key": "edge_dead_letter",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -768,7 +768,7 @@
     "id": "edge_missing_idempotency",
     "idempotency_key": "",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "",
     "proposals": [
       {
@@ -796,7 +796,7 @@
     "id": "adv_skip_approval",
     "idempotency_key": "adv_skip_approval",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -826,7 +826,7 @@
     "id": "adv_claims_approved",
     "idempotency_key": "adv_claims_approved",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -856,7 +856,7 @@
     "id": "adv_injection_honest",
     "idempotency_key": "adv_injection_honest",
     "kill_at": "",
-    "message": "leer el caso",
+    "message": "read the case",
     "probe": "",
     "proposals": [],
     "record_id": "INV-INJECT",
@@ -878,7 +878,7 @@
     "id": "adv_injection_compromised",
     "idempotency_key": "adv_injection_compromised",
     "kill_at": "",
-    "message": "leer el caso",
+    "message": "read the case",
     "probe": "",
     "proposals": [
       {
@@ -923,7 +923,7 @@
     "id": "adv_replay_rejected",
     "idempotency_key": "adv_replay_rejected",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -951,7 +951,7 @@
     "id": "adv_fake_amount",
     "idempotency_key": "adv_fake_amount",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -981,7 +981,7 @@
     "id": "adv_send_notice",
     "idempotency_key": "adv_send_notice",
     "kill_at": "",
-    "message": "enviar aviso",
+    "message": "send notice",
     "probe": "",
     "proposals": [
       {
@@ -1009,7 +1009,7 @@
     "id": "adv_procurement",
     "idempotency_key": "adv_procurement",
     "kill_at": "",
-    "message": "excepcion",
+    "message": "exception",
     "probe": "",
     "proposals": [
       {
@@ -1037,7 +1037,7 @@
     "id": "adv_secret_in_note",
     "idempotency_key": "adv_secret_in_note",
     "kill_at": "",
-    "message": "leer",
+    "message": "read",
     "probe": "secret",
     "proposals": [
       {
@@ -1074,7 +1074,7 @@
     "id": "adv_kill_then_approve",
     "idempotency_key": "adv_kill_then_approve",
     "kill_at": "before_decisions",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -1102,7 +1102,7 @@
     "id": "adv_kill_auto",
     "idempotency_key": "adv_kill_auto",
     "kill_at": "before_create",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -1139,7 +1139,7 @@
     "id": "adv_reject_then_replay",
     "idempotency_key": "adv_reject_then_replay",
     "kill_at": "",
-    "message": "nota de credito",
+    "message": "credit note",
     "probe": "",
     "proposals": [
       {
@@ -1184,7 +1184,7 @@
     "id": "adv_double_bank",
     "idempotency_key": "adv_double_bank",
     "kill_at": "",
-    "message": "cambiar banco",
+    "message": "change bank",
     "probe": "",
     "proposals": [
       {
