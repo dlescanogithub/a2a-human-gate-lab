@@ -22,7 +22,7 @@ python -m a2a_gate demo
 
 `make demo` is the same command. The process generates throwaway tokens, labels them NOT REAL, and does not store them. No network and no API key.
 
-A narrated screen recording of a real local run is in [docs/demo/](docs/demo/): [video](docs/demo/a2a_human_gate_lab_demo_en.mp4), [English subtitles](docs/demo/a2a_human_gate_lab_demo_en.en.srt), [Spanish subtitles](docs/demo/a2a_human_gate_lab_demo_en.es.srt). The narration voice is synthetic (xAI TTS). [number_trace.md](docs/demo/evidence_a2a_human_gate_lab_demo/number_trace.md) maps each number in the video to its source. The live figures on screen are the earlier scratch-client sample: planner only, scripted approvals, one model, one prompt.
+A narrated screen recording of a real local run is in [docs/demo/](docs/demo/): [video](docs/demo/a2a_human_gate_lab_demo_en.mp4) and [English subtitles](docs/demo/a2a_human_gate_lab_demo_en.en.srt). The narration voice is synthetic (xAI TTS). The video file still carries the original Spanish soft subtitle track and was not re-encoded. [number_trace.md](docs/demo/evidence_a2a_human_gate_lab_demo/number_trace.md) maps each number in the video to its source. The live figures on screen are the earlier scratch-client sample: planner only, scripted approvals, one model, one prompt.
 
 ## Business case
 
@@ -286,7 +286,7 @@ export ADMIN_TOKEN="replace-me"
 ## Where to go next in the docs
 
 - [docs/demo/](docs/demo/) — narrated recording of a real local run, with the number trace
-- [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) — walkthrough in plain Spanish
+- [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) — walkthrough for engineers and buyers
 - [docs/architecture.md](docs/architecture.md)
 - [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md)
 - [docs/BUSINESS_VALUE.md](docs/BUSINESS_VALUE.md) — value plan for a fictional insurer; synthetic figures are tagged [SYN]

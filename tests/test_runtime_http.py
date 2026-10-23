@@ -37,7 +37,7 @@ def test_fake_planner_ignores_note_text() -> None:
     planner = FakePlanner()
     plan = planner.complete(
         __import__("a2a_gate.types", fromlist=["PlanRequest"]).PlanRequest(
-            message="leer el caso",
+            message="read the case",
             record_id="INV-INJECT",
             case_id="x",
         )
@@ -58,12 +58,12 @@ def test_cassette_exhausts(tmp_path: Path) -> None:
     planner = CassettePlanner(plan)
     runtime = _runtime(tmp_path)
     runtime.planner = planner
-    task = runtime.create_task(Actor("requester.ana", "requester"), "leer", "INV-1001", "k1")
+    task = runtime.create_task(Actor("requester.ana", "requester"), "read", "INV-1001", "k1")
     assert task.state == "completed"
     with pytest.raises(Exception, match="cassette_exhausted"):
         planner.complete(
             __import__("a2a_gate.types", fromlist=["PlanRequest"]).PlanRequest(
-                "leer", "INV-1001", "x"
+                "read", "INV-1001", "x"
             )
         )
 
@@ -72,7 +72,7 @@ def test_gate_kill_idempotency_and_retries(tmp_path: Path) -> None:
     runtime = _runtime(tmp_path)
     requester = Actor("requester.ana", "requester")
     approver = Actor("approver.finance", "finance_approver")
-    pending = runtime.create_task(requester, "nota de credito", "INV-1001", "credit")
+    pending = runtime.create_task(requester, "credit note", "INV-1001", "credit")
     assert pending.state == "input-required"
     with pytest.raises(AuthError):
         runtime.approve(pending.id, requester, "issue_credit_note", "INV-1001")
@@ -88,10 +88,10 @@ def test_gate_kill_idempotency_and_retries(tmp_path: Path) -> None:
     again = runtime.approve(pending.id, approver, "issue_credit_note", "INV-1001")
     assert again.state == "completed"
     assert runtime.downstream.applied == ["credit:issue_credit_note:INV-1001"]
-    replay = runtime.create_task(requester, "nota de credito", "INV-1001", "credit")
+    replay = runtime.create_task(requester, "credit note", "INV-1001", "credit")
     assert replay.id == pending.id
 
-    bank = runtime.create_task(requester, "cambiar banco", "SUP-2001", "bank")
+    bank = runtime.create_task(requester, "change bank", "SUP-2001", "bank")
     rejected = runtime.reject(bank.id, approver, "change_supplier_bank", "SUP-2001")
     assert rejected.state == "rejected"
     still = runtime.approve(bank.id, approver, "change_supplier_bank", "SUP-2001")
@@ -99,13 +99,13 @@ def test_gate_kill_idempotency_and_retries(tmp_path: Path) -> None:
     assert len(runtime.downstream.applied) == 1
 
     runtime.clock.advance(10)
-    waiting = runtime.create_task(requester, "nota de credito", "INV-1005", "ttl")
+    waiting = runtime.create_task(requester, "credit note", "INV-1005", "ttl")
     runtime.clock.advance(3600)
     expired = runtime.approve(waiting.id, approver, "issue_credit_note", "INV-1005")
     assert expired.state == "rejected"
 
     runtime.kill("lab-admin", Actor("admin.ops", "admin"))
-    blocked = runtime.create_task(requester, "nota de credito", "INV-1002", "after")
+    blocked = runtime.create_task(requester, "credit note", "INV-1002", "after")
     assert blocked.state == "failed"
     assert len(runtime.downstream.applied) == 1
     with pytest.raises(AuthError):
@@ -117,15 +117,15 @@ def test_gate_kill_idempotency_and_retries(tmp_path: Path) -> None:
 def test_dead_letter_and_validation(tmp_path: Path) -> None:
     runtime = _runtime(tmp_path, failures=5)
     task = runtime.create_task(
-        Actor("requester.ana", "requester"), "nota de credito", "INV-1002", "dead"
+        Actor("requester.ana", "requester"), "credit note", "INV-1002", "dead"
     )
     assert task.state == "failed"
     assert task.actions[0].attempts == 3
     assert runtime.downstream.applied == []
     with pytest.raises(ValidationError):
-        runtime.create_task(Actor("requester.ana", "requester"), "leer", "INV-1001", "")
+        runtime.create_task(Actor("requester.ana", "requester"), "read", "INV-1001", "")
     missing = runtime.create_task(
-        Actor("requester.ana", "requester"), "leer", "INV-MISSING", "missing"
+        Actor("requester.ana", "requester"), "read", "INV-MISSING", "missing"
     )
     assert missing.state == "failed"
     with pytest.raises(ValidationError):
@@ -135,25 +135,25 @@ def test_dead_letter_and_validation(tmp_path: Path) -> None:
     with pytest.raises(ValidationError):
         runtime.create_task(
             Actor("requester.ana", "requester"),
-            "leer",
+            "read",
             "INV-1002",
             "mismatch",
-            record=with_note(record, "otra"),
+            record=with_note(record, "other"),
         )
 
 
 def test_admin_can_approve_and_cancel(tmp_path: Path) -> None:
     runtime = _runtime(tmp_path)
     requester = Actor("requester.ana", "requester")
-    task = runtime.create_task(requester, "nota de credito", "INV-1001", "admin-ok")
+    task = runtime.create_task(requester, "credit note", "INV-1001", "admin-ok")
     approved = runtime.approve(
         task.id, Actor("admin.ops", "admin"), "issue_credit_note", "INV-1001"
     )
     assert approved.state == "completed"
-    read = runtime.create_task(requester, "leer factura", "INV-1001", "read")
+    read = runtime.create_task(requester, "read invoice", "INV-1001", "read")
     canceled = runtime.cancel(read.id, requester)
     assert canceled.state == "completed"
-    pending = runtime.create_task(requester, "cambiar banco", "SUP-2001", "pend")
+    pending = runtime.create_task(requester, "change bank", "SUP-2001", "pend")
     with pytest.raises(AuthError):
         runtime.cancel(pending.id, Actor("other.person", "requester"))
     stopped = runtime.cancel(pending.id, Actor("admin.ops", "admin"))
@@ -163,7 +163,7 @@ def test_admin_can_approve_and_cancel(tmp_path: Path) -> None:
 def test_bypass_applies_without_approval(tmp_path: Path) -> None:
     runtime = _runtime(tmp_path, enforce=False)
     task = runtime.create_task(
-        Actor("requester.ana", "requester"), "nota de credito", "INV-1001", "bypass"
+        Actor("requester.ana", "requester"), "credit note", "INV-1001", "bypass"
     )
     assert task.state == "completed"
     assert task.actions[0].approval == "not_required"
@@ -228,7 +228,7 @@ def test_http_dispatch_and_server(tmp_path: Path) -> None:
             {
                 "requester_id": "requester.ana",
                 "requester_role": "requester",
-                "message": "nota de credito",
+                "message": "credit note",
                 "record_id": "INV-1001",
                 "idempotency_key": "http-1",
             }
